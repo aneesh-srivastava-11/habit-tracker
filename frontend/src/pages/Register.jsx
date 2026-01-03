@@ -12,14 +12,18 @@ import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
     const navigate = useNavigate();
-    const { register, loading } = useAuth();
+    const { register: registerUser } = useAuth();
 
     const [formData, setFormData] = useState({
+        name: '',
         email: '',
         password: '',
         confirmPassword: ''
     });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const { name, email, password, confirmPassword } = formData;
 
     const handleChange = (e) => {
         setFormData({
@@ -34,31 +38,55 @@ const Register = () => {
         setError('');
 
         // Validation
-        if (!formData.email || !formData.password || !formData.confirmPassword) {
-            setError('Please fill in all fields');
+        if (!name.trim()) {
+            setError('Please enter your name');
             return;
         }
 
-        if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+        if (!email.trim()) {
+            setError('Please enter your email');
             return;
         }
 
-        if (formData.password.length < 6) {
+        if (password.length < 6) {
             setError('Password must be at least 6 characters');
             return;
         }
 
+        if (!/[A-Z]/.test(password)) {
+            setError('Password must contain at least one uppercase letter');
+            return;
+        }
+
+        if (!/[a-z]/.test(password)) {
+            setError('Password must contain at least one lowercase letter');
+            return;
+        }
+
+        if (!/[0-9]/.test(password)) {
+            setError('Password must contain at least one number');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        setLoading(true);
+
         // Attempt registration
-        const result = await register({
-            email: formData.email,
-            password: formData.password
+        const result = await registerUser({
+            name,
+            email,
+            password
         });
 
         if (result.success) {
             navigate('/dashboard');
         } else {
             setError(result.error || 'Registration failed. Please try again.');
+            setLoading(false);
         }
     };
 
@@ -85,6 +113,23 @@ const Register = () => {
                     {/* Register Form */}
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
+                            <label htmlFor="name" className="block text-sm font-medium mb-2">
+                                Name
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={name}
+                                onChange={handleChange}
+                                className="input"
+                                placeholder="Enter your name"
+                                disabled={loading}
+                                required
+                            />
+                        </div>
+
+                        <div>
                             <label htmlFor="email" className="block text-sm font-medium mb-2">
                                 Email
                             </label>
@@ -92,7 +137,7 @@ const Register = () => {
                                 type="email"
                                 id="email"
                                 name="email"
-                                value={formData.email}
+                                value={email}
                                 onChange={handleChange}
                                 className="input"
                                 placeholder="you@example.com"

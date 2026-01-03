@@ -18,25 +18,45 @@ import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
     {
-        // Email address (unique identifier)
+        /**
+         * User's display name
+         * Required for personalization
+         */
+        name: {
+            type: String,
+            required: [true, 'Please provide your name'],
+            trim: true,
+            minlength: [2, 'Name must be at least 2 characters'],
+            maxlength: [50, 'Name cannot exceed 50 characters']
+        },
+
+        /**
+         * User's email address
+         * Used for authentication
+         * SECURITY: Unique index for fast lookups and preventing duplicates
+         */
         email: {
             type: String,
-            required: [true, 'Email is required'],
+            required: [true, 'Please provide an email'],
             unique: true,
             lowercase: true,
             trim: true,
             match: [
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                'Please provide a valid email address'
+                'Please provide a valid email'
             ]
         },
 
-        // Hashed password (never store plain text)
+        /**
+         * User's password (hashed)
+         * SECURITY: Never returned in queries (select: false)
+         * Hashed using bcrypt with 12 salt rounds
+         */
         password: {
             type: String,
-            required: [true, 'Password is required'],
+            required: [true, 'Please provide a password'],
             minlength: [6, 'Password must be at least 6 characters'],
-            select: false // Never return password in queries by default
+            select: false // Never return password in queries
         }
     },
     {

@@ -10,7 +10,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
     getHabits,
@@ -150,14 +150,19 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h1 className="text-3xl font-bold mb-1">Habit Tracker</h1>
-                        <p className="text-text-secondary">{user?.email}</p>
+                        <p className="text-text-secondary">Welcome, {user?.name || user?.email}</p>
                     </div>
-                    <button
-                        onClick={handleLogout}
-                        className="btn btn-secondary"
-                    >
-                        Logout
-                    </button>
+                    <div className="flex gap-3">
+                        <Link to="/reports" className="btn btn-secondary">
+                            📊 Reports
+                        </Link>
+                        <button
+                            onClick={handleLogout}
+                            className="btn btn-secondary"
+                        >
+                            Logout
+                        </button>
+                    </div>
                 </div>
 
                 {/* Error Message */}

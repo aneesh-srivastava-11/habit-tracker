@@ -34,7 +34,7 @@ const router = express.Router();
  */
 router.post('/register', /* authLimiter, */ validateRegister, async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { name, email, password } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -47,6 +47,7 @@ router.post('/register', /* authLimiter, */ validateRegister, async (req, res) =
 
         // Create new user (password will be hashed by pre-save hook)
         const user = await User.create({
+            name,
             email,
             password
         });
@@ -60,7 +61,7 @@ router.post('/register', /* authLimiter, */ validateRegister, async (req, res) =
 
         await Habit.insertMany(defaultHabits);
 
-        console.log(`✅ New user registered: ${email}`);
+        console.log(`✅ New user registered: ${name} (${email})`);
 
         // Send token response
         sendTokenResponse(user, 201, res);
@@ -154,6 +155,7 @@ router.get('/me', protect, async (req, res) => {
             success: true,
             user: {
                 _id: req.user._id,
+                name: req.user.name,
                 email: req.user.email,
                 createdAt: req.user.createdAt
             }

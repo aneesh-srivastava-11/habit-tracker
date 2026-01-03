@@ -42,30 +42,30 @@ export const handleValidationErrors = (req, res, next) => {
 };
 
 /**
- * Register validation rules
- * 
- * SECURITY:
- * - Email format validation
- * - Password strength requirements (min 6 chars)
- * - Input sanitization (trim, escape)
+ * Validation for user registration
+ * OWASP: Input validation prevents injection attacks
  */
 export const validateRegister = [
+    // Name validation
+    body('name')
+        .trim()
+        .notEmpty().withMessage('Name is required')
+        .isLength({ min: 2, max: 50 }).withMessage('Name must be between 2 and 50 characters')
+        .escape(), // Sanitize HTML
+
+    // Email validation
     body('email')
         .trim()
-        .isEmail()
-        .withMessage('Please provide a valid email address')
-        .normalizeEmail()
-        .isLength({ max: 255 })
-        .withMessage('Email cannot exceed 255 characters'),
+        .isEmail().withMessage('Please provide a valid email address')
+        .normalizeEmail(),
 
+    // Password validation
     body('password')
         .trim()
-        .isLength({ min: 6 })
-        .withMessage('Password must be at least 6 characters long')
-        .isLength({ max: 128 })
-        .withMessage('Password cannot exceed 128 characters')
-        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-        .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
+        .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+        .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+        .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
+        .matches(/[0-9]/).withMessage('Password must contain at least one number'),
 
     handleValidationErrors
 ];
