@@ -1,0 +1,127 @@
+/**
+ * Main CSS File
+ * 
+ * Tailwind CSS directives and custom grayscale theme.
+ * Professional, minimal, serious design - black, white, and gray only.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-dark-border;
+  }
+
+  body {
+    @apply bg-dark-bg text-text-primary font-sans antialiased;
+  }
+
+  /* Custom scrollbar - grayscale */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dark-border rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark-hover;
+  }
+}
+
+@layer components {
+
+  /* Button styles */
+  .btn {
+    @apply px-4 py-2 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-bg;
+  }
+
+  .btn-primary {
+    @apply bg-white text-black hover:bg-gray-200 focus:ring-white;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-card text-text-primary border border-dark-border hover:bg-dark-hover focus:ring-dark-border;
+  }
+
+  .btn-danger {
+    @apply bg-gray-800 text-white hover:bg-gray-700 focus:ring-gray-600;
+  }
+
+  /* Input styles */
+  .input {
+    @apply w-full px-4 py-2 bg-dark-card border border-dark-border rounded text-text-primary placeholder-text-muted focus:outline-none focus:border-white transition-colors;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-dark-card border border-dark-border rounded-lg p-6;
+  }
+
+  /* Checkbox styles */
+  .checkbox {
+    @apply w-6 h-6 rounded border-2 border-dark-border bg-dark-bg cursor-pointer transition-all duration-200 hover:border-white flex items-center justify-center;
+  }
+
+  .checkbox-checked {
+    @apply bg-white border-white;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-dark-card border border-dark-border;
+  }
+
+  /* Streak display */
+  .streak-display {
+    @apply flex items-center gap-2 text-2xl font-bold;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply inline-block w-6 h-6 border-2 border-dark-border border-t-white rounded-full animate-spin;
+  }
+}
+
+@layer utilities {
+
+  /* Custom utilities */
+  .text-gradient {
+    @apply bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
