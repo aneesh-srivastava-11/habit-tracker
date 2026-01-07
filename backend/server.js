@@ -75,15 +75,33 @@ connectDB();
  * - MIME type sniffing
  * - DNS prefetch control
  */
-app.use(helmet({
+app.use(
+  helmet({
     contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-        },
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: [
+          "'self'",
+          "http://localhost:5000",
+          "https://habit-tracker-7xk6.onrender.com"
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://fonts.googleapis.com"
+        ],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com"
+        ],
+        imgSrc: ["'self'", "data:"],
+        scriptSrc: ["'self'"],
+      },
     },
     crossOriginEmbedderPolicy: false,
-}));
+  })
+);
+
 
 /**
  * CORS - Cross-Origin Resource Sharing
