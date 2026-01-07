@@ -90,7 +90,8 @@ app.use(helmet({
  * Allows frontend to make requests with credentials
  */
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL ||[ 'http://localhost:5173',
+        'https://habit-tracker-7xk6.onrender.com'],
     credentials: true, // Allow cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']

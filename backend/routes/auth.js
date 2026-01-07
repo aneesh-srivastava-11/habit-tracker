@@ -125,10 +125,12 @@ router.post('/login', /* authLimiter, */ validateLogin, async (req, res) => {
 router.post('/logout', protect, (req, res) => {
     try {
         // Clear cookie
-        res.cookie('token', 'none', {
-            expires: new Date(Date.now() + 10 * 1000), // Expire in 10 seconds
-            httpOnly: true
-        });
+       res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+});
 
         res.status(200).json({
             success: true,
